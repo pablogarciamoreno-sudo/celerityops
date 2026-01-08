@@ -21,7 +21,9 @@ import {
   Shield,
   Copy,
   Check,
+  UserPlus,
 } from "lucide-react"
+import Link from "next/link"
 
 const TEST_USERS = [
   {
@@ -87,14 +89,26 @@ export default function LoginPage() {
     setError(null)
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      console.log("[v0] Intentando login con:", email)
+
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
+
+      console.log("[v0] Respuesta de login:", { data, error })
+
       if (error) throw error
-      router.push("/dashboard")
+
+      if (data.user) {
+        console.log("[v0] Login exitoso, redirigiendo a dashboard")
+        router.push("/dashboard")
+        router.refresh()
+      }
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "Ha ocurrido un error")
+      console.error("[v0] Error en login:", error)
+      const errorMessage = error instanceof Error ? error.message : "Ha ocurrido un error"
+      setError(errorMessage)
     } finally {
       setIsLoading(false)
     }
@@ -173,6 +187,17 @@ export default function LoginPage() {
                   <Button type="submit" className="w-full bg-sky-600 hover:bg-sky-700 text-white" disabled={isLoading}>
                     {isLoading ? "Iniciando sesión..." : "Iniciar sesión"}
                   </Button>
+
+                  <Link href="/register" className="w-full">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full border-sky-300 text-sky-700 hover:bg-sky-50 bg-transparent"
+                    >
+                      <UserPlus className="mr-2 h-4 w-4" />
+                      Crear cuenta nueva
+                    </Button>
+                  </Link>
                 </div>
               </form>
 
