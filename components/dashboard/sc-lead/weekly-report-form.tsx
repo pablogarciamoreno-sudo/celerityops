@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { CalendarIcon, Save, History, Plus } from "lucide-react"
+import { CalendarIcon, Save, History, Plus, Info } from "lucide-react"
 import type { Site, SCLeadWeeklyReport } from "@/lib/types/database"
 
 interface WeeklyReportFormProps {
@@ -43,6 +43,22 @@ function getCurrentWeekInfo() {
   }
 }
 
+// KPI Definitions with formulas for reference
+const KPI_HELP = {
+  screen_failure_rate: "SC-001: (Screen Failures / Total Screened) × 100. Target: ≤15%",
+  conversion_rate: "SC-002: (Randomizados / Tamizados) × 100. Target: ≥35%",
+  recruitment_target_compliance: "SC-004: (Acumulado Mes / Meta Mensual) × 100. Target: ≥85%",
+  randomized_vs_projection: "SC-005: (Real Semanal / Proyección Semanal) × 100. Target: ≥90%",
+  visits_completed_pct: "SC-006: (Visitas Completadas / Visitas Planeadas) × 100. Target: ≥90%",
+  visit_window_adherence: "SC-007: (Visitas en Ventana / Visitas Completadas) × 100. Target: ≥90%",
+  procedures_complete_pct: "SC-008: (Procedimientos Completos / Total Procedimientos) × 100. Target: ≥95%",
+  patient_retention: "SC-009: ((Ongoing Inicio - Perdidos) / Ongoing Inicio) × 100. Target: ≥90%",
+  sae_reported_on_time: "SC-010: (SAEs Reportados 24h / SAEs Identificados) × 100. Target: 100%",
+  protocol_deviation_rate: "SC-012: (Total Desviaciones / Total Procedimientos) × 100. Target: ≤3%",
+  major_deviation_rate: "SC-013: (Desviaciones Mayores / Total Procedimientos) × 100. Target: ≤1%",
+  mv_siv_participation: "SC-043: (MV/SIV Participadas / MV/SIV Planeadas) × 100. Target: 100%",
+}
+
 export function WeeklyReportForm({ sites, userSiteId, recentReports, userId }: WeeklyReportFormProps) {
   const supabase = createClient()
   const weekInfo = getCurrentWeekInfo()
@@ -57,36 +73,42 @@ export function WeeklyReportForm({ sites, userSiteId, recentReports, userId }: W
     week_number: weekInfo.weekNumber,
     period_start: weekInfo.periodStart,
     period_end: weekInfo.periodEnd,
-    // Reclutamiento
-    patients_screened: 0,
-    patients_randomized: 0,
-    screen_failures: 0,
-    monthly_target: 0,
-    monthly_accumulated: 0,
-    weekly_projection: 0,
-    weekly_actual: 0,
-    // Visitas
-    visits_planned: 0,
-    visits_completed: 0,
-    visits_in_window: 0,
-    visits_procedures_complete: 0,
-    patients_ongoing_start: 0,
-    patients_lost: 0,
-    // Seguridad
-    saes_identified: 0,
-    saes_reported_24h: 0,
-    major_deviations: 0,
-    total_deviations_month: 0,
-    total_procedures_month: 0,
-    major_deviations_month: 0,
-    open_capas: 0,
-    // Eficiencia
-    total_coordinators: 0,
-    total_studies: 0,
-    total_patients_ongoing: 0,
-    mv_siv_planned: 0,
-    mv_siv_participated: 0,
-    // Notes
+
+    // RECLUTAMIENTO (SC-001 to SC-005)
+    patients_screened: 0,          // Total tamizados
+    patients_randomized: 0,        // Total randomizados
+    screen_failures: 0,            // Screen failures
+    monthly_target: 0,             // Meta mensual de reclutamiento
+    monthly_accumulated: 0,        // Acumulado del mes
+    weekly_projection: 0,          // Proyección semanal
+    weekly_actual: 0,              // Real semanal
+
+    // EJECUCIÓN DE VISITAS (SC-006 to SC-009)
+    visits_planned: 0,             // Visitas planeadas
+    visits_completed: 0,           // Visitas completadas
+    visits_in_window: 0,           // Visitas dentro de ventana
+    total_procedures: 0,           // Total procedimientos programados
+    procedures_complete: 0,        // Procedimientos completados correctamente
+    patients_ongoing_start: 0,     // Pacientes ongoing al inicio del periodo
+    patients_lost: 0,              // Pacientes perdidos/discontinuados
+
+    // SEGURIDAD Y COMPLIANCE (SC-010 to SC-014)
+    saes_identified: 0,            // SAEs identificados
+    saes_reported_24h: 0,          // SAEs reportados en 24h
+    major_deviations: 0,           // Desviaciones mayores (semana)
+    total_deviations_month: 0,     // Total desviaciones del mes
+    total_procedures_month: 0,     // Total procedimientos del mes
+    major_deviations_month: 0,     // Desviaciones mayores del mes
+    open_capas: 0,                 // CAPAs abiertas
+
+    // EFICIENCIA OPERATIVA (SC-040 to SC-043)
+    total_coordinators: 0,         // Total coordinadores
+    total_studies: 0,              // Total estudios activos
+    total_patients_ongoing: 0,     // Total pacientes activos
+    mv_siv_planned: 0,             // MV/SIV planeadas
+    mv_siv_participated: 0,        // MV/SIV con participación
+
+    // Notas
     notes: "",
   })
 
@@ -126,9 +148,16 @@ export function WeeklyReportForm({ sites, userSiteId, recentReports, userId }: W
     }
   }
 
-  const NumberInput = ({ label, field, hint }: { label: string; field: string; hint?: string }) => (
+  const NumberInput = ({ label, field, hint, kpiRef }: { label: string; field: string; hint?: string; kpiRef?: keyof typeof KPI_HELP }) => (
     <div className="space-y-1">
-      <Label htmlFor={field} className="text-sm">{label}</Label>
+      <div className="flex items-center gap-1">
+        <Label htmlFor={field} className="text-sm">{label}</Label>
+        {kpiRef && KPI_HELP[kpiRef] && (
+          <span title={KPI_HELP[kpiRef]} className="cursor-help">
+            <Info className="h-3 w-3 text-muted-foreground" />
+          </span>
+        )}
+      </div>
       <Input
         id={field}
         type="number"
@@ -141,12 +170,57 @@ export function WeeklyReportForm({ sites, userSiteId, recentReports, userId }: W
     </div>
   )
 
+  // Calculate KPIs for preview
+  const calculateKPIs = () => {
+    const kpis: Record<string, { value: string; status: "on_target" | "warning" | "critical" | "no_data" }> = {}
+
+    // SC-001: Screen Failure Rate
+    if (formData.patients_screened > 0) {
+      const sfr = (formData.screen_failures / formData.patients_screened) * 100
+      kpis.screen_failure_rate = {
+        value: `${sfr.toFixed(1)}%`,
+        status: sfr <= 15 ? "on_target" : sfr <= 20 ? "warning" : "critical"
+      }
+    }
+
+    // SC-002: Conversion Rate
+    if (formData.patients_screened > 0) {
+      const conv = (formData.patients_randomized / formData.patients_screened) * 100
+      kpis.conversion_rate = {
+        value: `${conv.toFixed(1)}%`,
+        status: conv >= 35 ? "on_target" : conv >= 25 ? "warning" : "critical"
+      }
+    }
+
+    // SC-006: Visits Completed
+    if (formData.visits_planned > 0) {
+      const vc = (formData.visits_completed / formData.visits_planned) * 100
+      kpis.visits_completed = {
+        value: `${vc.toFixed(1)}%`,
+        status: vc >= 90 ? "on_target" : vc >= 80 ? "warning" : "critical"
+      }
+    }
+
+    // SC-010: SAE Reporting
+    if (formData.saes_identified > 0) {
+      const sae = (formData.saes_reported_24h / formData.saes_identified) * 100
+      kpis.sae_reporting = {
+        value: `${sae.toFixed(0)}%`,
+        status: sae === 100 ? "on_target" : sae >= 90 ? "warning" : "critical"
+      }
+    }
+
+    return kpis
+  }
+
+  const kpis = calculateKPIs()
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Registro Semanal</h1>
-          <p className="text-muted-foreground">Ingresa los KPIs de la semana</p>
+          <h1 className="text-2xl font-bold">Registro Semanal de KPIs</h1>
+          <p className="text-muted-foreground">Ingresa los datos para calcular los 39 KPIs del módulo SC Lead</p>
         </div>
         <Badge variant="outline" className="text-sm">
           <CalendarIcon className="h-3 w-3 mr-1" />
@@ -170,7 +244,7 @@ export function WeeklyReportForm({ sites, userSiteId, recentReports, userId }: W
           {/* Site and Period Selection */}
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg">Periodo</CardTitle>
+              <CardTitle className="text-lg">Periodo de Reporte</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -222,75 +296,208 @@ export function WeeklyReportForm({ sites, userSiteId, recentReports, userId }: W
             </CardContent>
           </Card>
 
-          {/* Recruitment KPIs */}
+          {/* KPI Preview */}
+          {Object.keys(kpis).length > 0 && (
+            <Card className="border-primary/20 bg-primary/5">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">Vista Previa de KPIs Calculados</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-3">
+                  {kpis.screen_failure_rate && (
+                    <Badge variant={kpis.screen_failure_rate.status === "on_target" ? "default" : kpis.screen_failure_rate.status === "warning" ? "secondary" : "destructive"}>
+                      Screen Failure: {kpis.screen_failure_rate.value}
+                    </Badge>
+                  )}
+                  {kpis.conversion_rate && (
+                    <Badge variant={kpis.conversion_rate.status === "on_target" ? "default" : kpis.conversion_rate.status === "warning" ? "secondary" : "destructive"}>
+                      Conversión: {kpis.conversion_rate.value}
+                    </Badge>
+                  )}
+                  {kpis.visits_completed && (
+                    <Badge variant={kpis.visits_completed.status === "on_target" ? "default" : kpis.visits_completed.status === "warning" ? "secondary" : "destructive"}>
+                      Visitas: {kpis.visits_completed.value}
+                    </Badge>
+                  )}
+                  {kpis.sae_reporting && (
+                    <Badge variant={kpis.sae_reporting.status === "on_target" ? "default" : kpis.sae_reporting.status === "warning" ? "secondary" : "destructive"}>
+                      SAE Report: {kpis.sae_reporting.value}
+                    </Badge>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* RECLUTAMIENTO - SC-001 to SC-005 */}
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-lg">Reclutamiento</CardTitle>
-              <CardDescription>Métricas de tamizaje y enrolamiento</CardDescription>
+              <CardDescription>Datos para calcular SC-001 a SC-005</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <NumberInput label="Pacientes Tamizados" field="patients_screened" />
-                <NumberInput label="Pacientes Randomizados" field="patients_randomized" />
-                <NumberInput label="Screen Failures" field="screen_failures" />
-                <NumberInput label="Meta Mensual" field="monthly_target" />
-                <NumberInput label="Acumulado Mes" field="monthly_accumulated" />
-                <NumberInput label="Proyección Semanal" field="weekly_projection" />
-                <NumberInput label="Real Semanal" field="weekly_actual" />
+                <NumberInput
+                  label="Pacientes Tamizados"
+                  field="patients_screened"
+                  kpiRef="screen_failure_rate"
+                />
+                <NumberInput
+                  label="Pacientes Randomizados"
+                  field="patients_randomized"
+                  kpiRef="conversion_rate"
+                />
+                <NumberInput
+                  label="Screen Failures"
+                  field="screen_failures"
+                  kpiRef="screen_failure_rate"
+                />
+                <NumberInput
+                  label="Meta Mensual"
+                  field="monthly_target"
+                  kpiRef="recruitment_target_compliance"
+                />
+                <NumberInput
+                  label="Acumulado Mes"
+                  field="monthly_accumulated"
+                  kpiRef="recruitment_target_compliance"
+                />
+                <NumberInput
+                  label="Proyección Semanal"
+                  field="weekly_projection"
+                  kpiRef="randomized_vs_projection"
+                />
+                <NumberInput
+                  label="Real Semanal"
+                  field="weekly_actual"
+                  kpiRef="randomized_vs_projection"
+                />
               </div>
             </CardContent>
           </Card>
 
-          {/* Visits KPIs */}
+          {/* EJECUCIÓN DE VISITAS - SC-006 to SC-009 */}
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-lg">Ejecución de Visitas</CardTitle>
-              <CardDescription>Cumplimiento de visitas programadas</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <NumberInput label="Visitas Planeadas" field="visits_planned" />
-                <NumberInput label="Visitas Completadas" field="visits_completed" />
-                <NumberInput label="Visitas en Ventana" field="visits_in_window" />
-                <NumberInput label="Procedimientos Completos" field="visits_procedures_complete" />
-                <NumberInput label="Pacientes Ongoing (inicio)" field="patients_ongoing_start" />
-                <NumberInput label="Pacientes Perdidos" field="patients_lost" />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Safety KPIs */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg">Seguridad y Compliance</CardTitle>
-              <CardDescription>SAEs, desviaciones y CAPAs</CardDescription>
+              <CardDescription>Datos para calcular SC-006 a SC-009</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <NumberInput label="SAEs Identificados" field="saes_identified" />
-                <NumberInput label="SAEs Reportados 24h" field="saes_reported_24h" />
-                <NumberInput label="Desviaciones Mayores" field="major_deviations" />
-                <NumberInput label="Total Desviaciones (mes)" field="total_deviations_month" />
-                <NumberInput label="Total Procedimientos (mes)" field="total_procedures_month" />
-                <NumberInput label="Desv. Mayores (mes)" field="major_deviations_month" />
-                <NumberInput label="CAPAs Abiertos" field="open_capas" />
+                <NumberInput
+                  label="Visitas Planeadas"
+                  field="visits_planned"
+                  kpiRef="visits_completed_pct"
+                />
+                <NumberInput
+                  label="Visitas Completadas"
+                  field="visits_completed"
+                  kpiRef="visits_completed_pct"
+                />
+                <NumberInput
+                  label="Visitas en Ventana"
+                  field="visits_in_window"
+                  kpiRef="visit_window_adherence"
+                />
+                <NumberInput
+                  label="Total Procedimientos"
+                  field="total_procedures"
+                  kpiRef="procedures_complete_pct"
+                />
+                <NumberInput
+                  label="Procedimientos Completos"
+                  field="procedures_complete"
+                  kpiRef="procedures_complete_pct"
+                />
+                <NumberInput
+                  label="Pacientes Ongoing (inicio)"
+                  field="patients_ongoing_start"
+                  kpiRef="patient_retention"
+                />
+                <NumberInput
+                  label="Pacientes Perdidos"
+                  field="patients_lost"
+                  kpiRef="patient_retention"
+                />
               </div>
             </CardContent>
           </Card>
 
-          {/* Efficiency KPIs */}
+          {/* SEGURIDAD Y COMPLIANCE - SC-010 to SC-014 */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Seguridad y Compliance</CardTitle>
+              <CardDescription>Datos para calcular SC-010 a SC-014</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <NumberInput
+                  label="SAEs Identificados"
+                  field="saes_identified"
+                  kpiRef="sae_reported_on_time"
+                />
+                <NumberInput
+                  label="SAEs Reportados 24h"
+                  field="saes_reported_24h"
+                  kpiRef="sae_reported_on_time"
+                />
+                <NumberInput
+                  label="Desviaciones Mayores (semana)"
+                  field="major_deviations"
+                />
+                <NumberInput
+                  label="Total Desviaciones (mes)"
+                  field="total_deviations_month"
+                  kpiRef="protocol_deviation_rate"
+                />
+                <NumberInput
+                  label="Total Procedimientos (mes)"
+                  field="total_procedures_month"
+                  kpiRef="protocol_deviation_rate"
+                />
+                <NumberInput
+                  label="Desv. Mayores (mes)"
+                  field="major_deviations_month"
+                  kpiRef="major_deviation_rate"
+                />
+                <NumberInput
+                  label="CAPAs Abiertos"
+                  field="open_capas"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* EFICIENCIA OPERATIVA - SC-040 to SC-043 */}
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-lg">Eficiencia Operativa</CardTitle>
-              <CardDescription>Capacidad y monitoring visits</CardDescription>
+              <CardDescription>Datos para calcular SC-040 a SC-043</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <NumberInput label="Total Coordinadores" field="total_coordinators" />
-                <NumberInput label="Total Estudios" field="total_studies" />
-                <NumberInput label="Pacientes Ongoing" field="total_patients_ongoing" />
-                <NumberInput label="MV/SIV Planeadas" field="mv_siv_planned" />
-                <NumberInput label="MV/SIV Participadas" field="mv_siv_participated" />
+                <NumberInput
+                  label="Total Coordinadores"
+                  field="total_coordinators"
+                />
+                <NumberInput
+                  label="Total Estudios Activos"
+                  field="total_studies"
+                />
+                <NumberInput
+                  label="Pacientes Ongoing"
+                  field="total_patients_ongoing"
+                />
+                <NumberInput
+                  label="MV/SIV Planeadas"
+                  field="mv_siv_planned"
+                  kpiRef="mv_siv_participation"
+                />
+                <NumberInput
+                  label="MV/SIV Participadas"
+                  field="mv_siv_participated"
+                  kpiRef="mv_siv_participation"
+                />
               </div>
             </CardContent>
           </Card>
@@ -298,11 +505,11 @@ export function WeeklyReportForm({ sites, userSiteId, recentReports, userId }: W
           {/* Notes */}
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg">Notas</CardTitle>
+              <CardTitle className="text-lg">Notas y Observaciones</CardTitle>
             </CardHeader>
             <CardContent>
               <Textarea
-                placeholder="Observaciones, contingencias, logros destacados..."
+                placeholder="Observaciones, contingencias, logros destacados, riesgos identificados..."
                 value={formData.notes}
                 onChange={(e) => handleChange("notes", e.target.value)}
                 rows={3}
