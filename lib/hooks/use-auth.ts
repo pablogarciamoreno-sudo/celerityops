@@ -102,6 +102,8 @@ export function useAuth() {
         return "/dashboard/coo"
       case "Site Lead":
         return "/dashboard/site-lead"
+      case "SC Lead":
+        return "/dashboard/sc-lead"
       case "Study Coordinator":
         return "/dashboard/coordinator"
       case "Regulatory Specialist":
@@ -123,7 +125,8 @@ export function useAuth() {
     isAuthenticated: !!user,
     isCOO: user?.role?.name === "COO",
     isSiteLead: user?.role?.name === "Site Lead",
+    isSCLead: user?.role?.name === "SC Lead",
     isQA: user?.role?.name === "QA Manager",
-    canViewAllSites: user?.role?.name === "COO" || user?.role?.name === "QA Manager",
+    canViewAllSites: user?.role?.name === "COO" || user?.role?.name === "QA Manager" || user?.role?.name === "SC Lead",
   }
 }

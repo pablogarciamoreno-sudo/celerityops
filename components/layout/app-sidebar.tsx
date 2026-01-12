@@ -20,6 +20,11 @@ import {
   CheckSquare,
   FileCheck,
   Database,
+  Target,
+  Calendar,
+  UserCog,
+  Rocket,
+  Star,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -93,6 +98,30 @@ const navigationByRole: Record<
     {
       label: "Registrar",
       items: [{ title: "Notas de Supervisión", url: "/dashboard/site-lead/register", icon: FileText }],
+    },
+  ],
+  "SC Lead": [
+    {
+      label: "General",
+      items: [
+        { title: "Scorecard KPIs", url: "/dashboard/sc-lead", icon: Target },
+        { title: "Registro Semanal", url: "/dashboard/sc-lead/weekly-report", icon: Calendar },
+      ],
+    },
+    {
+      label: "Operaciones",
+      items: [
+        { title: "Action Items", url: "/dashboard/sc-lead/action-items", icon: CheckSquare },
+        { title: "Start-up Tracker", url: "/dashboard/sc-lead/startup", icon: Rocket },
+        { title: "Audit Readiness", url: "/dashboard/sc-lead/audit-readiness", icon: Shield },
+      ],
+    },
+    {
+      label: "Equipo",
+      items: [
+        { title: "Roster Equipo", url: "/dashboard/sc-lead/team", icon: UserCog },
+        { title: "Evaluaciones Sponsor", url: "/dashboard/sc-lead/sponsor-evals", icon: Star },
+      ],
     },
   ],
   "Study Coordinator": [

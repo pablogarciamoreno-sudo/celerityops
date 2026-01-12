@@ -1,6 +1,6 @@
 export type Role = {
   id: string
-  name: "COO" | "Site Lead" | "Study Coordinator" | "Regulatory Specialist" | "Data Entry Specialist" | "QA Manager"
+  name: "COO" | "Site Lead" | "SC Lead" | "Study Coordinator" | "Regulatory Specialist" | "Data Entry Specialist" | "QA Manager"
   description: string
   permissions_json: Record<string, boolean>
   created_at: string
@@ -221,4 +221,156 @@ export type ActivityLog = {
   details: Record<string, unknown> | null
   created_at: string
   user?: User
+}
+
+// =============================================
+// SC LEAD MODULE TYPES
+// =============================================
+
+export type KPIStatus = 'on_target' | 'warning' | 'critical' | 'info' | 'pending'
+
+export type KPICategory =
+  | 'recruitment'
+  | 'execution'
+  | 'safety'
+  | 'monitoring'
+  | 'startup'
+  | 'sponsor'
+  | 'team'
+  | 'efficiency'
+
+export type KPIOperator = '<=' | '>=' | '=' | 'range' | 'info'
+
+export type SCLeadWeeklyReport = {
+  id: string
+  site_id: string
+  year: number
+  week_number: number
+  period_start: string
+  period_end: string
+  // Reclutamiento
+  patients_screened: number
+  patients_randomized: number
+  screen_failures: number
+  monthly_target: number
+  monthly_accumulated: number
+  weekly_projection: number
+  weekly_actual: number
+  // Visitas
+  visits_planned: number
+  visits_completed: number
+  visits_in_window: number
+  visits_procedures_complete: number
+  patients_ongoing_start: number
+  patients_lost: number
+  // Seguridad
+  saes_identified: number
+  saes_reported_24h: number
+  major_deviations: number
+  total_deviations_month: number
+  total_procedures_month: number
+  major_deviations_month: number
+  open_capas: number
+  // Eficiencia
+  total_coordinators: number
+  total_studies: number
+  total_patients_ongoing: number
+  mv_siv_planned: number
+  mv_siv_participated: number
+  // Meta
+  reported_by: string | null
+  notes: string | null
+  created_at: string
+  updated_at: string
+  site?: Site
+}
+
+export type SCLeadActionItem = {
+  id: string
+  site_id: string
+  study_id: string | null
+  mv_date: string | null
+  description: string
+  category: string
+  severity: 'Major' | 'Minor' | 'Observacion'
+  responsible: string
+  due_date: string
+  closed_date: string | null
+  status: 'Abierto' | 'En Progreso' | 'Cerrado'
+  notes: string | null
+  created_by: string | null
+  created_at: string
+  updated_at: string
+  site?: Site
+  study?: Study
+  days_open?: number
+}
+
+export type SCLeadStartupTracker = {
+  id: string
+  site_id: string
+  study_name: string
+  protocol_number: string | null
+  sponsor: string | null
+  ec_submission_date: string | null
+  ec_approval_date: string | null
+  last_approval_date: string | null
+  fpfv_date: string | null
+  required_resubmission: boolean
+  status: 'En Sometimiento' | 'Aprobacion Pendiente' | 'Aprobado' | 'En Activacion' | 'FPFV Logrado' | 'Suspendido'
+  notes: string | null
+  created_by: string | null
+  created_at: string
+  updated_at: string
+  site?: Site
+}
+
+export type SCLeadTeamMember = {
+  id: string
+  site_id: string
+  name: string
+  role: string
+  hire_date: string | null
+  gcp_current: boolean
+  gcp_expiry_date: string | null
+  performance_rating: 'Excepcional' | 'Satisfactorio' | 'Necesita Mejora' | 'No Evaluado'
+  workload_score: number | null
+  studies_assigned: number
+  patients_assigned: number
+  is_active: boolean
+  created_at: string
+  updated_at: string
+  site?: Site
+}
+
+export type SCLeadAuditReadiness = {
+  id: string
+  site_id: string
+  period: string
+  isf_complete: boolean
+  regulatory_current: boolean
+  delegation_logs_current: boolean
+  consents_verified: boolean
+  source_docs_complete: boolean
+  saes_documented: boolean
+  deviations_documented: boolean
+  etmf_current: boolean
+  score: number | null
+  notes: string | null
+  created_by: string | null
+  created_at: string
+  updated_at: string
+  site?: Site
+}
+
+// KPI calculado con valor y estado
+export type SCLeadKPIValue = {
+  kpi_key: string
+  label: string
+  category: KPICategory
+  value: number | null
+  target: number | string | null
+  operator: KPIOperator
+  unit: string
+  status: KPIStatus
 }

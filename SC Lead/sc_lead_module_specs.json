@@ -1,0 +1,478 @@
+{
+  "module": "sc_lead",
+  "display_name": "Study Coordinator Lead",
+  "total_kpis": 39,
+  "categories": [
+    {
+      "key": "recruitment",
+      "label": "🎯 Reclutamiento",
+      "count": 5
+    },
+    {
+      "key": "execution",
+      "label": "📋 Ejecución de Visitas",
+      "count": 4
+    },
+    {
+      "key": "safety",
+      "label": "⚠️ Seguridad y Compliance",
+      "count": 5
+    },
+    {
+      "key": "monitoring",
+      "label": "📝 Monitoring Action Items",
+      "count": 6
+    },
+    {
+      "key": "startup",
+      "label": "🚀 Start-up y Regulatorio",
+      "count": 6
+    },
+    {
+      "key": "sponsor",
+      "label": "⭐ Satisfacción Patrocinadores",
+      "count": 3
+    },
+    {
+      "key": "team",
+      "label": "👥 Gestión de Equipo",
+      "count": 6
+    },
+    {
+      "key": "efficiency",
+      "label": "⚙️ Eficiencia Operativa",
+      "count": 4
+    }
+  ],
+  "kpis": [
+    {
+      "id": "SC-001",
+      "kpi_key": "screen_failure_rate",
+      "label": "Screen Failure Rate",
+      "data_type": "percentage",
+      "target": 15,
+      "operator": "<=",
+      "unit": "%",
+      "frequency": "Semanal",
+      "category": "recruitment"
+    },
+    {
+      "id": "SC-002",
+      "kpi_key": "conversion_screening_randomized",
+      "label": "Conversión Screening→Randomizado",
+      "data_type": "percentage",
+      "target": 35,
+      "operator": ">=",
+      "unit": "%",
+      "frequency": "Semanal",
+      "category": "recruitment"
+    },
+    {
+      "id": "SC-003",
+      "kpi_key": "days_referral_to_contact",
+      "label": "Tiempo Derivación→Contacto",
+      "data_type": "number",
+      "target": 1,
+      "operator": "<=",
+      "unit": "días",
+      "frequency": "Por paciente",
+      "category": "recruitment"
+    },
+    {
+      "id": "SC-004",
+      "kpi_key": "recruitment_target_compliance",
+      "label": "% Cumplimiento Targets Reclutamiento",
+      "data_type": "percentage",
+      "target": 85,
+      "operator": ">=",
+      "unit": "%",
+      "frequency": "Mensual",
+      "category": "recruitment"
+    },
+    {
+      "id": "SC-005",
+      "kpi_key": "randomized_vs_projection",
+      "label": "Randomizados vs Proyección",
+      "data_type": "percentage",
+      "target": 90,
+      "operator": ">=",
+      "unit": "%",
+      "frequency": "Semanal",
+      "category": "recruitment"
+    },
+    {
+      "id": "SC-006",
+      "kpi_key": "visits_completed_pct",
+      "label": "% Visitas Completadas",
+      "data_type": "percentage",
+      "target": 90,
+      "operator": ">=",
+      "unit": "%",
+      "frequency": "Semanal",
+      "category": "execution"
+    },
+    {
+      "id": "SC-007",
+      "kpi_key": "visit_window_adherence",
+      "label": "% Adherencia Ventana Visita",
+      "data_type": "percentage",
+      "target": 90,
+      "operator": ">=",
+      "unit": "%",
+      "frequency": "Semanal",
+      "category": "execution"
+    },
+    {
+      "id": "SC-008",
+      "kpi_key": "procedures_complete_pct",
+      "label": "% Procedimientos Completos por Visita",
+      "data_type": "percentage",
+      "target": 95,
+      "operator": ">=",
+      "unit": "%",
+      "frequency": "Semanal",
+      "category": "execution"
+    },
+    {
+      "id": "SC-009",
+      "kpi_key": "patient_retention_monthly",
+      "label": "Retención de Pacientes",
+      "data_type": "percentage",
+      "target": 90,
+      "operator": ">=",
+      "unit": "%",
+      "frequency": "Mensual",
+      "category": "execution"
+    },
+    {
+      "id": "SC-010",
+      "kpi_key": "sae_reported_on_time",
+      "label": "% SAEs Reportados en Plazo",
+      "data_type": "percentage",
+      "target": 100,
+      "operator": "=",
+      "unit": "%",
+      "frequency": "Por evento",
+      "category": "safety"
+    },
+    {
+      "id": "SC-011",
+      "kpi_key": "major_deviations_weekly",
+      "label": "Desviaciones Mayores (semana)",
+      "data_type": "count",
+      "target": 2,
+      "operator": "<=",
+      "unit": "qty",
+      "frequency": "Semanal",
+      "category": "safety"
+    },
+    {
+      "id": "SC-012",
+      "kpi_key": "protocol_deviation_rate",
+      "label": "Tasa Desviaciones Protocolo",
+      "data_type": "percentage",
+      "target": 3,
+      "operator": "<=",
+      "unit": "%",
+      "frequency": "Mensual",
+      "category": "safety"
+    },
+    {
+      "id": "SC-013",
+      "kpi_key": "major_deviation_rate",
+      "label": "Tasa Desviaciones Mayores",
+      "data_type": "percentage",
+      "target": 1,
+      "operator": "<=",
+      "unit": "%",
+      "frequency": "Mensual",
+      "category": "safety"
+    },
+    {
+      "id": "SC-014",
+      "kpi_key": "open_capas",
+      "label": "CAPAs Abiertas del Área",
+      "data_type": "count",
+      "target": 3,
+      "operator": "<=",
+      "unit": "qty",
+      "frequency": "Semanal",
+      "category": "safety"
+    },
+    {
+      "id": "SC-019",
+      "kpi_key": "open_action_items",
+      "label": "Action Items Abiertos",
+      "data_type": "count",
+      "target": 5,
+      "operator": "<=",
+      "unit": "qty",
+      "frequency": "Semanal",
+      "category": "monitoring"
+    },
+    {
+      "id": "SC-020",
+      "kpi_key": "ai_closed_on_time",
+      "label": "% AI Cerrados en Plazo (≤15d)",
+      "data_type": "percentage",
+      "target": 90,
+      "operator": ">=",
+      "unit": "%",
+      "frequency": "Semanal",
+      "category": "monitoring"
+    },
+    {
+      "id": "SC-021",
+      "kpi_key": "ai_overdue",
+      "label": "AI Vencidos (>15 días)",
+      "data_type": "count",
+      "target": 0,
+      "operator": "=",
+      "unit": "qty",
+      "frequency": "Semanal",
+      "category": "monitoring"
+    },
+    {
+      "id": "SC-022",
+      "kpi_key": "avg_days_ai_closure",
+      "label": "Promedio Días Cierre AI",
+      "data_type": "number",
+      "target": 10,
+      "operator": "<=",
+      "unit": "días",
+      "frequency": "Semanal",
+      "category": "monitoring"
+    },
+    {
+      "id": "SC-023",
+      "kpi_key": "major_findings_mv_pct",
+      "label": "% Major Findings en MV",
+      "data_type": "percentage",
+      "target": 5,
+      "operator": "<=",
+      "unit": "%",
+      "frequency": "Por MV",
+      "category": "monitoring"
+    },
+    {
+      "id": "SC-024",
+      "kpi_key": "audit_readiness_score",
+      "label": "Audit Readiness Score",
+      "data_type": "percentage",
+      "target": 90,
+      "operator": ">=",
+      "unit": "%",
+      "frequency": "Mensual",
+      "category": "monitoring"
+    },
+    {
+      "id": "SC-025",
+      "kpi_key": "days_to_fpfv",
+      "label": "Tiempo hasta FPFV (días)",
+      "data_type": "number",
+      "target": 30,
+      "operator": "<=",
+      "unit": "días",
+      "frequency": "Por estudio",
+      "category": "startup"
+    },
+    {
+      "id": "SC-026",
+      "kpi_key": "fpfv_within_30days_pct",
+      "label": "% Estudios con FPFV ≤30 días",
+      "data_type": "percentage",
+      "target": 85,
+      "operator": ">=",
+      "unit": "%",
+      "frequency": "Trimestral",
+      "category": "startup"
+    },
+    {
+      "id": "SC-027",
+      "kpi_key": "submissions_no_resubmit",
+      "label": "% Sometimientos sin Re-sometimiento",
+      "data_type": "percentage",
+      "target": 90,
+      "operator": ">=",
+      "unit": "%",
+      "frequency": "Trimestral",
+      "category": "startup"
+    },
+    {
+      "id": "SC-028",
+      "kpi_key": "ec_approval_cycle_days",
+      "label": "Tiempo Ciclo Aprobación EC",
+      "data_type": "number",
+      "target": 45,
+      "operator": "<=",
+      "unit": "días",
+      "frequency": "Por estudio",
+      "category": "startup"
+    },
+    {
+      "id": "SC-029",
+      "kpi_key": "studies_in_startup",
+      "label": "Estudios en Start-Up Activos",
+      "data_type": "count",
+      "target": NaN,
+      "operator": "info",
+      "unit": "qty",
+      "frequency": "Semanal",
+      "category": "startup"
+    },
+    {
+      "id": "SC-030",
+      "kpi_key": "pending_amendments",
+      "label": "Enmiendas Pendientes Aprobación",
+      "data_type": "count",
+      "target": NaN,
+      "operator": "info",
+      "unit": "qty",
+      "frequency": "Semanal",
+      "category": "startup"
+    },
+    {
+      "id": "SC-031",
+      "kpi_key": "sponsor_performance_score",
+      "label": "Score Evaluación Performance",
+      "data_type": "decimal",
+      "target": 4,
+      "operator": ">=",
+      "unit": "/5.0",
+      "frequency": "Trimestral",
+      "category": "sponsor"
+    },
+    {
+      "id": "SC-032",
+      "kpi_key": "cra_response_48h",
+      "label": "% Consultas CRA/Sponsor ≤48h",
+      "data_type": "percentage",
+      "target": 90,
+      "operator": ">=",
+      "unit": "%",
+      "frequency": "Semanal",
+      "category": "sponsor"
+    },
+    {
+      "id": "SC-033",
+      "kpi_key": "sponsor_nps",
+      "label": "NPS de Sponsors",
+      "data_type": "decimal",
+      "target": 8,
+      "operator": ">=",
+      "unit": "/10",
+      "frequency": "Trimestral",
+      "category": "sponsor"
+    },
+    {
+      "id": "SC-034",
+      "kpi_key": "annual_turnover",
+      "label": "Turnover Anual Equipo",
+      "data_type": "percentage",
+      "target": 18,
+      "operator": "<=",
+      "unit": "%",
+      "frequency": "Anual",
+      "category": "team"
+    },
+    {
+      "id": "SC-035",
+      "kpi_key": "satisfactory_performance_pct",
+      "label": "% Equipo Evaluación Satisfactoria",
+      "data_type": "percentage",
+      "target": 80,
+      "operator": ">=",
+      "unit": "%",
+      "frequency": "Semestral",
+      "category": "team"
+    },
+    {
+      "id": "SC-036",
+      "kpi_key": "gcp_current_pct",
+      "label": "% Equipo GCP Vigente",
+      "data_type": "percentage",
+      "target": 100,
+      "operator": "=",
+      "unit": "%",
+      "frequency": "Mensual",
+      "category": "team"
+    },
+    {
+      "id": "SC-037",
+      "kpi_key": "span_of_control",
+      "label": "Span of Control",
+      "data_type": "count",
+      "target": 8,
+      "operator": "<=",
+      "unit": "reportes",
+      "frequency": "Mensual",
+      "category": "team"
+    },
+    {
+      "id": "SC-038",
+      "kpi_key": "training_completion_pct",
+      "label": "Training Completado vs Plan",
+      "data_type": "percentage",
+      "target": 90,
+      "operator": ">=",
+      "unit": "%",
+      "frequency": "Mensual",
+      "category": "team"
+    },
+    {
+      "id": "SC-039",
+      "kpi_key": "workload_score",
+      "label": "Workload Score Equipo",
+      "data_type": "decimal",
+      "target": "2.5-3.5",
+      "operator": "range",
+      "unit": "score",
+      "frequency": "Semanal",
+      "category": "team"
+    },
+    {
+      "id": "SC-040",
+      "kpi_key": "studies_per_coordinator",
+      "label": "Estudios Activos por Coordinador",
+      "data_type": "decimal",
+      "target": "3-5",
+      "operator": "range",
+      "unit": "qty",
+      "frequency": "Mensual",
+      "category": "efficiency"
+    },
+    {
+      "id": "SC-041",
+      "kpi_key": "patients_per_coordinator",
+      "label": "Pacientes Activos por Coordinador",
+      "data_type": "decimal",
+      "target": "15-25",
+      "operator": "range",
+      "unit": "qty",
+      "frequency": "Semanal",
+      "category": "efficiency"
+    },
+    {
+      "id": "SC-042",
+      "kpi_key": "contingency_resolution_hours",
+      "label": "Tiempo Resolución Contingencias",
+      "data_type": "number",
+      "target": 4,
+      "operator": "<=",
+      "unit": "horas",
+      "frequency": "Por evento",
+      "category": "efficiency"
+    },
+    {
+      "id": "SC-043",
+      "kpi_key": "mv_siv_participation",
+      "label": "% Participación en MV/SIV",
+      "data_type": "percentage",
+      "target": 100,
+      "operator": "=",
+      "unit": "%",
+      "frequency": "Por visita",
+      "category": "efficiency"
+    }
+  ]
+}
