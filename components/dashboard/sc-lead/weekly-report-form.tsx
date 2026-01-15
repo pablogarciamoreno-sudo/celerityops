@@ -43,20 +43,17 @@ function getCurrentWeekInfo() {
   }
 }
 
-// KPI Definitions with formulas for reference
+// KPI Definitions with formulas for reference (28 KPIs - KPIs.md)
 const KPI_HELP = {
-  screen_failure_rate: "SC-001: (Screen Failures / Total Screened) × 100. Target: ≤15%",
-  conversion_rate: "SC-002: (Randomizados / Tamizados) × 100. Target: ≥35%",
-  recruitment_target_compliance: "SC-004: (Acumulado Mes / Meta Mensual) × 100. Target: ≥85%",
-  randomized_vs_projection: "SC-005: (Real Semanal / Proyección Semanal) × 100. Target: ≥90%",
-  visits_completed_pct: "SC-006: (Visitas Completadas / Visitas Planeadas) × 100. Target: ≥90%",
-  visit_window_adherence: "SC-007: (Visitas en Ventana / Visitas Completadas) × 100. Target: ≥90%",
-  procedures_complete_pct: "SC-008: (Procedimientos Completos / Total Procedimientos) × 100. Target: ≥95%",
-  patient_retention: "SC-009: ((Ongoing Inicio - Perdidos) / Ongoing Inicio) × 100. Target: ≥90%",
-  sae_reported_on_time: "SC-010: (SAEs Reportados 24h / SAEs Identificados) × 100. Target: 100%",
-  protocol_deviation_rate: "SC-012: (Total Desviaciones / Total Procedimientos) × 100. Target: ≤3%",
-  major_deviation_rate: "SC-013: (Desviaciones Mayores / Total Procedimientos) × 100. Target: ≤1%",
-  mv_siv_participation: "SC-043: (MV/SIV Participadas / MV/SIV Planeadas) × 100. Target: 100%",
+  screen_failure_rate: "SC-08: (Screen Failures / Total Screened) × 100. Target: ≤28%",
+  enrollment_vs_plan: "SC-07: (Acumulado Mes / Meta Mensual) × 100. Target: ≥85%",
+  visits_completed_pct: "SC-11: (Visitas Completadas / Visitas Planeadas) × 100. Target: ≥95%",
+  visit_window_adherence: "SC-12: (Visitas en Ventana / Visitas Completadas) × 100. Target: ≥90%",
+  patient_retention: "SC-09: ((Ongoing Inicio - Perdidos) / Ongoing Inicio) × 100. Target: ≥85%",
+  sae_reported_on_time: "SC-17: (SAEs Reportados 24h / SAEs Identificados) × 100. Target: 100%",
+  protocol_deviation_rate: "SC-16: (Total Desviaciones / Total Procedimientos) × 100. Target: ≤3%",
+  critical_deviations: "SC-15: (Desviaciones Críticas / 100 Visitas). Target: ≤2",
+  mv_siv_participation: "SC-06: (MV/SIV Participadas / MV/SIV Planeadas) × 100. Target: 100%",
 }
 
 export function WeeklyReportForm({ sites, userSiteId, recentReports, userId }: WeeklyReportFormProps) {
@@ -74,7 +71,7 @@ export function WeeklyReportForm({ sites, userSiteId, recentReports, userId }: W
     period_start: weekInfo.periodStart,
     period_end: weekInfo.periodEnd,
 
-    // RECLUTAMIENTO (SC-001 to SC-005)
+    // RECLUTAMIENTO (SC-07, SC-08, SC-09)
     patients_screened: 0,          // Total tamizados
     patients_randomized: 0,        // Total randomizados
     screen_failures: 0,            // Screen failures
@@ -83,16 +80,15 @@ export function WeeklyReportForm({ sites, userSiteId, recentReports, userId }: W
     weekly_projection: 0,          // Proyección semanal
     weekly_actual: 0,              // Real semanal
 
-    // EJECUCIÓN DE VISITAS (SC-006 to SC-009)
+    // EJECUCIÓN DE VISITAS (SC-11, SC-12, SC-09)
     visits_planned: 0,             // Visitas planeadas
     visits_completed: 0,           // Visitas completadas
     visits_in_window: 0,           // Visitas dentro de ventana
-    total_procedures: 0,           // Total procedimientos programados
-    procedures_complete: 0,        // Procedimientos completados correctamente
+    visits_procedures_complete: 0, // Visitas con procedimientos 100% completos
     patients_ongoing_start: 0,     // Pacientes ongoing al inicio del periodo
     patients_lost: 0,              // Pacientes perdidos/discontinuados
 
-    // SEGURIDAD Y COMPLIANCE (SC-010 to SC-014)
+    // SEGURIDAD Y COMPLIANCE (SC-15, SC-16, SC-17, SC-18)
     saes_identified: 0,            // SAEs identificados
     saes_reported_24h: 0,          // SAEs reportados en 24h
     major_deviations: 0,           // Desviaciones mayores (semana)
@@ -101,7 +97,7 @@ export function WeeklyReportForm({ sites, userSiteId, recentReports, userId }: W
     major_deviations_month: 0,     // Desviaciones mayores del mes
     open_capas: 0,                 // CAPAs abiertas
 
-    // EFICIENCIA OPERATIVA (SC-040 to SC-043)
+    // EFICIENCIA OPERATIVA (SC-06)
     total_coordinators: 0,         // Total coordinadores
     total_studies: 0,              // Total estudios activos
     total_patients_ongoing: 0,     // Total pacientes activos
@@ -174,34 +170,34 @@ export function WeeklyReportForm({ sites, userSiteId, recentReports, userId }: W
   const calculateKPIs = () => {
     const kpis: Record<string, { value: string; status: "on_target" | "warning" | "critical" | "no_data" }> = {}
 
-    // SC-001: Screen Failure Rate
+    // SC-08: Screen Fail Rate (Target: ≤28%)
     if (formData.patients_screened > 0) {
       const sfr = (formData.screen_failures / formData.patients_screened) * 100
       kpis.screen_failure_rate = {
         value: `${sfr.toFixed(1)}%`,
-        status: sfr <= 15 ? "on_target" : sfr <= 20 ? "warning" : "critical"
+        status: sfr <= 28 ? "on_target" : sfr <= 35 ? "warning" : "critical"
       }
     }
 
-    // SC-002: Conversion Rate
-    if (formData.patients_screened > 0) {
-      const conv = (formData.patients_randomized / formData.patients_screened) * 100
-      kpis.conversion_rate = {
-        value: `${conv.toFixed(1)}%`,
-        status: conv >= 35 ? "on_target" : conv >= 25 ? "warning" : "critical"
+    // SC-07: Enrollment vs Plan (Target: ≥85%)
+    if (formData.monthly_target > 0) {
+      const evp = (formData.monthly_accumulated / formData.monthly_target) * 100
+      kpis.enrollment_vs_plan = {
+        value: `${evp.toFixed(1)}%`,
+        status: evp >= 85 ? "on_target" : evp >= 75 ? "warning" : "critical"
       }
     }
 
-    // SC-006: Visits Completed
+    // SC-11: Visits Completed vs Planned (Target: ≥95%)
     if (formData.visits_planned > 0) {
       const vc = (formData.visits_completed / formData.visits_planned) * 100
       kpis.visits_completed = {
         value: `${vc.toFixed(1)}%`,
-        status: vc >= 90 ? "on_target" : vc >= 80 ? "warning" : "critical"
+        status: vc >= 95 ? "on_target" : vc >= 90 ? "warning" : "critical"
       }
     }
 
-    // SC-010: SAE Reporting
+    // SC-17: SAE Reported <24h (Target: 100%)
     if (formData.saes_identified > 0) {
       const sae = (formData.saes_reported_24h / formData.saes_identified) * 100
       kpis.sae_reporting = {
@@ -220,7 +216,7 @@ export function WeeklyReportForm({ sites, userSiteId, recentReports, userId }: W
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Registro Semanal de KPIs</h1>
-          <p className="text-muted-foreground">Ingresa los datos para calcular los 39 KPIs del módulo SC Lead</p>
+          <p className="text-muted-foreground">Ingresa los datos para calcular los 28 KPIs del módulo SC Lead</p>
         </div>
         <Badge variant="outline" className="text-sm">
           <CalendarIcon className="h-3 w-3 mr-1" />
@@ -329,11 +325,11 @@ export function WeeklyReportForm({ sites, userSiteId, recentReports, userId }: W
             </Card>
           )}
 
-          {/* RECLUTAMIENTO - SC-001 to SC-005 */}
+          {/* RECLUTAMIENTO - SC-07, SC-08, SC-09 */}
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-lg">Reclutamiento</CardTitle>
-              <CardDescription>Datos para calcular SC-001 a SC-005</CardDescription>
+              <CardDescription>Datos para calcular SC-07, SC-08, SC-09</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -376,11 +372,11 @@ export function WeeklyReportForm({ sites, userSiteId, recentReports, userId }: W
             </CardContent>
           </Card>
 
-          {/* EJECUCIÓN DE VISITAS - SC-006 to SC-009 */}
+          {/* EJECUCIÓN DE VISITAS - SC-11, SC-12 */}
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-lg">Ejecución de Visitas</CardTitle>
-              <CardDescription>Datos para calcular SC-006 a SC-009</CardDescription>
+              <CardDescription>Datos para calcular SC-11, SC-12</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -400,13 +396,9 @@ export function WeeklyReportForm({ sites, userSiteId, recentReports, userId }: W
                   kpiRef="visit_window_adherence"
                 />
                 <NumberInput
-                  label="Total Procedimientos"
-                  field="total_procedures"
-                  kpiRef="procedures_complete_pct"
-                />
-                <NumberInput
-                  label="Procedimientos Completos"
-                  field="procedures_complete"
+                  label="Visitas Procedimientos 100%"
+                  field="visits_procedures_complete"
+                  hint="Visitas donde se completaron todos los procedimientos"
                   kpiRef="procedures_complete_pct"
                 />
                 <NumberInput
@@ -423,11 +415,11 @@ export function WeeklyReportForm({ sites, userSiteId, recentReports, userId }: W
             </CardContent>
           </Card>
 
-          {/* SEGURIDAD Y COMPLIANCE - SC-010 to SC-014 */}
+          {/* SEGURIDAD Y COMPLIANCE - SC-15, SC-16, SC-17, SC-18 */}
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-lg">Seguridad y Compliance</CardTitle>
-              <CardDescription>Datos para calcular SC-010 a SC-014</CardDescription>
+              <CardDescription>Datos para calcular SC-15, SC-16, SC-17, SC-18</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -468,11 +460,11 @@ export function WeeklyReportForm({ sites, userSiteId, recentReports, userId }: W
             </CardContent>
           </Card>
 
-          {/* EFICIENCIA OPERATIVA - SC-040 to SC-043 */}
+          {/* EFICIENCIA OPERATIVA - SC-06 */}
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-lg">Eficiencia Operativa</CardTitle>
-              <CardDescription>Datos para calcular SC-040 a SC-043</CardDescription>
+              <CardDescription>Datos para calcular SC-06 (Participación MV/SIV)</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">

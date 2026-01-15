@@ -28,6 +28,10 @@ export default async function SCLeadPage() {
   let teamMembers: any[] = []
   let auditReadiness: any[] = []
   let sites: any[] = []
+  // Datos adicionales para KPIs específicos
+  let patientContacts: any[] = []     // SC-10: referral_to_contact
+  let sponsorQueries: any[] = []      // SC-26: cra_response_48h
+  let sponsorEvaluations: any[] = []  // SC-27: sponsor_performance_score
 
   try {
     const queries = [
@@ -61,6 +65,24 @@ export default async function SCLeadPage() {
         .limit(10),
       // Sites
       supabase.from("sites").select("*").eq("is_active", true),
+      // SC-10: Patient contacts (last 30 days)
+      supabase
+        .from("sc_lead_patient_contacts")
+        .select("*")
+        .gte("referral_date", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
+        .order("referral_date", { ascending: false }),
+      // SC-26: Sponsor queries (last 30 days)
+      supabase
+        .from("sc_lead_sponsor_queries")
+        .select("*")
+        .gte("received_at", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
+        .order("received_at", { ascending: false }),
+      // SC-27: Latest sponsor evaluations
+      supabase
+        .from("sc_lead_sponsor_evaluations")
+        .select("*")
+        .order("evaluation_date", { ascending: false })
+        .limit(10),
     ]
 
     const [
@@ -70,6 +92,9 @@ export default async function SCLeadPage() {
       teamResult,
       auditResult,
       sitesResult,
+      patientContactsResult,
+      sponsorQueriesResult,
+      sponsorEvalsResult,
     ] = await Promise.all(queries)
 
     weeklyReports = weeklyResult.data || []
@@ -78,6 +103,9 @@ export default async function SCLeadPage() {
     teamMembers = teamResult.data || []
     auditReadiness = auditResult.data || []
     sites = sitesResult.data || []
+    patientContacts = patientContactsResult.data || []
+    sponsorQueries = sponsorQueriesResult.data || []
+    sponsorEvaluations = sponsorEvalsResult.data || []
   } catch (error) {
     console.error("Error fetching SC Lead data:", error)
   }
@@ -91,6 +119,9 @@ export default async function SCLeadPage() {
       auditReadiness={auditReadiness}
       sites={sites}
       userSiteId={siteId}
+      patientContacts={patientContacts}
+      sponsorQueries={sponsorQueries}
+      sponsorEvaluations={sponsorEvaluations}
     />
   )
 }

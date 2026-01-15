@@ -32,76 +32,88 @@ import type {
 } from "@/lib/types/database"
 
 // ========================================
-// 39 KPIs del módulo SC Lead (del JSON)
+// 28 KPIs del módulo SC Lead (del KPIs.md)
+// Fuente: SC Lead/KPIs.md
 // ========================================
 const KPI_DEFINITIONS = [
-  // RECLUTAMIENTO (5 KPIs)
-  { id: "SC-001", key: "screen_failure_rate", label: "Screen Failure Rate", category: "recruitment", target: 15, operator: "<=", unit: "%", frequency: "Semanal" },
-  { id: "SC-002", key: "conversion_screening_randomized", label: "Conversión Screening→Randomizado", category: "recruitment", target: 35, operator: ">=", unit: "%", frequency: "Semanal" },
-  { id: "SC-003", key: "days_referral_to_contact", label: "Tiempo Derivación→Contacto", category: "recruitment", target: 1, operator: "<=", unit: "días", frequency: "Por paciente" },
-  { id: "SC-004", key: "recruitment_target_compliance", label: "% Cumplimiento Targets Reclutamiento", category: "recruitment", target: 85, operator: ">=", unit: "%", frequency: "Mensual" },
-  { id: "SC-005", key: "randomized_vs_projection", label: "Randomizados vs Proyección", category: "recruitment", target: 90, operator: ">=", unit: "%", frequency: "Semanal" },
+  // 🚀 START-UP (6 KPIs: #1-6)
+  { id: "SC-01", key: "feasibility_response", label: "Respuesta a Factibilidad (site)", category: "startup", target: 2, operator: "<=", unit: "días", frequency: "Por estudio" },
+  { id: "SC-02", key: "team_assignment_post_selection", label: "Asignación de Equipo Post-Selección", category: "startup", target: 3, operator: "<=", unit: "días", frequency: "Por estudio" },
+  { id: "SC-03", key: "training_completed_pre_siv", label: "Entrenamientos Sistemas Completados Pre-SIV", category: "startup", target: 100, operator: "=", unit: "%", frequency: "Por estudio" },
+  { id: "SC-04", key: "checklist_pre_siv", label: "Checklist Pre-SIV Completado (1 sem antes)", category: "startup", target: 100, operator: "=", unit: "%", frequency: "Por estudio" },
+  { id: "SC-05", key: "siv_to_fpi", label: "SIV → FPI", category: "startup", target: 21, operator: "<=", unit: "días", frequency: "Por estudio" },
+  { id: "SC-06", key: "siv_mv_participation", label: "Participación en SIV/MV", category: "startup", target: 100, operator: "=", unit: "%", frequency: "Por visita" },
 
-  // EJECUCIÓN DE VISITAS (4 KPIs)
-  { id: "SC-006", key: "visits_completed_pct", label: "% Visitas Completadas", category: "execution", target: 90, operator: ">=", unit: "%", frequency: "Semanal" },
-  { id: "SC-007", key: "visit_window_adherence", label: "% Adherencia Ventana Visita", category: "execution", target: 90, operator: ">=", unit: "%", frequency: "Semanal" },
-  { id: "SC-008", key: "procedures_complete_pct", label: "% Procedimientos Completos por Visita", category: "execution", target: 95, operator: ">=", unit: "%", frequency: "Semanal" },
-  { id: "SC-009", key: "patient_retention_monthly", label: "Retención de Pacientes", category: "execution", target: 90, operator: ">=", unit: "%", frequency: "Mensual" },
+  // 🎯 RECLUTAMIENTO Y RETENCIÓN (6 KPIs: #7-12)
+  { id: "SC-07", key: "enrollment_vs_plan", label: "Enrollment vs Plan (site)", category: "recruitment", target: 85, operator: ">=", unit: "%", frequency: "Mensual" },
+  { id: "SC-08", key: "screen_fail_rate", label: "Screen-Fail Rate", category: "recruitment", target: 28, operator: "<=", unit: "%", frequency: "Mensual" },
+  { id: "SC-09", key: "patient_retention", label: "Retención de Pacientes", category: "recruitment", target: 85, operator: ">=", unit: "%", frequency: "Mensual" },
+  { id: "SC-10", key: "referral_to_contact", label: "Tiempo Derivación → Contacto Paciente", category: "recruitment", target: 24, operator: "<=", unit: "horas", frequency: "Por paciente" },
+  { id: "SC-11", key: "visits_completed_vs_planned", label: "% Visitas Completadas vs Planificadas", category: "recruitment", target: 95, operator: ">=", unit: "%", frequency: "Semanal" },
+  { id: "SC-12", key: "visit_window_adherence", label: "% Adherencia a Ventana de Visita", category: "recruitment", target: 90, operator: ">=", unit: "%", frequency: "Semanal" },
 
-  // SEGURIDAD Y COMPLIANCE (5 KPIs)
-  { id: "SC-010", key: "sae_reported_on_time", label: "% SAEs Reportados en Plazo", category: "safety", target: 100, operator: "=", unit: "%", frequency: "Por evento" },
-  { id: "SC-011", key: "major_deviations_weekly", label: "Desviaciones Mayores (semana)", category: "safety", target: 2, operator: "<=", unit: "qty", frequency: "Semanal" },
-  { id: "SC-012", key: "protocol_deviation_rate", label: "Tasa Desviaciones Protocolo", category: "safety", target: 3, operator: "<=", unit: "%", frequency: "Mensual" },
-  { id: "SC-013", key: "major_deviation_rate", label: "Tasa Desviaciones Mayores", category: "safety", target: 1, operator: "<=", unit: "%", frequency: "Mensual" },
-  { id: "SC-014", key: "open_capas", label: "CAPAs Abiertas del Área", category: "safety", target: 3, operator: "<=", unit: "qty", frequency: "Semanal" },
+  // 📊 CALIDAD DE DATOS (6 KPIs: #13-18)
+  { id: "SC-13", key: "query_resolution", label: "Resolución de Queries", category: "quality", target: 48, operator: "<=", unit: "horas", frequency: "Por query" },
+  { id: "SC-14", key: "etmf_completeness", label: "eTMF Completeness", category: "quality", target: 95, operator: ">=", unit: "%", frequency: "Mensual" },
+  { id: "SC-15", key: "critical_deviations_per_100", label: "Desviaciones Críticas / 100 Visitas", category: "quality", target: 2, operator: "<=", unit: "qty", frequency: "Mensual" },
+  { id: "SC-16", key: "protocol_deviation_rate", label: "Tasa Desviaciones Protocolo (todas)", category: "quality", target: 3, operator: "<=", unit: "%", frequency: "Mensual" },
+  { id: "SC-17", key: "sae_reported_24h", label: "% SAEs Reportados <24h", category: "quality", target: 100, operator: "=", unit: "%", frequency: "Por evento" },
+  { id: "SC-18", key: "capa_closed_on_time", label: "CAPA Cerradas On-Time", category: "quality", target: 95, operator: ">=", unit: "%", frequency: "Mensual" },
 
-  // MONITORING ACTION ITEMS (6 KPIs)
-  { id: "SC-019", key: "open_action_items", label: "Action Items Abiertos", category: "monitoring", target: 5, operator: "<=", unit: "qty", frequency: "Semanal" },
-  { id: "SC-020", key: "ai_closed_on_time", label: "% AI Cerrados en Plazo (≤15d)", category: "monitoring", target: 90, operator: ">=", unit: "%", frequency: "Semanal" },
-  { id: "SC-021", key: "ai_overdue", label: "AI Vencidos (>15 días)", category: "monitoring", target: 0, operator: "=", unit: "qty", frequency: "Semanal" },
-  { id: "SC-022", key: "avg_days_ai_closure", label: "Promedio Días Cierre AI", category: "monitoring", target: 10, operator: "<=", unit: "días", frequency: "Semanal" },
-  { id: "SC-023", key: "major_findings_mv_pct", label: "% Major Findings en MV", category: "monitoring", target: 5, operator: "<=", unit: "%", frequency: "Por MV" },
-  { id: "SC-024", key: "audit_readiness_score", label: "Audit Readiness Score", category: "monitoring", target: 90, operator: ">=", unit: "%", frequency: "Mensual" },
+  // 💻 TRANSFORMACIÓN DIGITAL (2 KPIs: #20-21)
+  { id: "SC-20", key: "data_entry_post_visit", label: "Data Entry Post-Visita", category: "digital", target: 24, operator: "<=", unit: "horas", frequency: "Por visita" },
+  { id: "SC-21", key: "etmf_docs_on_time", label: "% Documentos Subidos eTMF en Plazo", category: "digital", target: 95, operator: ">=", unit: "%", frequency: "Mensual" },
 
-  // START-UP Y REGULATORIO (6 KPIs)
-  { id: "SC-025", key: "days_to_fpfv", label: "Tiempo hasta FPFV (días)", category: "startup", target: 30, operator: "<=", unit: "días", frequency: "Por estudio" },
-  { id: "SC-026", key: "fpfv_within_30days_pct", label: "% Estudios con FPFV ≤30 días", category: "startup", target: 85, operator: ">=", unit: "%", frequency: "Trimestral" },
-  { id: "SC-027", key: "submissions_no_resubmit", label: "% Sometimientos sin Re-sometimiento", category: "startup", target: 90, operator: ">=", unit: "%", frequency: "Trimestral" },
-  { id: "SC-028", key: "ec_approval_cycle_days", label: "Tiempo Ciclo Aprobación EC", category: "startup", target: 45, operator: "<=", unit: "días", frequency: "Por estudio" },
-  { id: "SC-029", key: "studies_in_startup", label: "Estudios en Start-Up Activos", category: "startup", target: null, operator: "info", unit: "qty", frequency: "Semanal" },
-  { id: "SC-030", key: "pending_amendments", label: "Enmiendas Pendientes Aprobación", category: "startup", target: null, operator: "info", unit: "qty", frequency: "Semanal" },
+  // 📝 MONITOREO Y ACTION ITEMS (4 KPIs: #22-25)
+  { id: "SC-22", key: "ai_closed_14days", label: "Action Items Cerrados ≤14 días", category: "monitoring", target: 95, operator: ">=", unit: "%", frequency: "Semanal" },
+  { id: "SC-23", key: "ai_aging_30days", label: "Action Items Aging >30 días", category: "monitoring", target: 1, operator: "<=", unit: "qty", frequency: "Semanal" },
+  { id: "SC-24", key: "avg_days_ai_closure", label: "Promedio Días Cierre Action Items", category: "monitoring", target: 7, operator: "<=", unit: "días", frequency: "Semanal" },
+  { id: "SC-25", key: "major_findings_mv", label: "% Major Findings en MV", category: "monitoring", target: 5, operator: "<=", unit: "%", frequency: "Por MV" },
 
-  // SATISFACCIÓN PATROCINADORES (3 KPIs)
-  { id: "SC-031", key: "sponsor_performance_score", label: "Score Evaluación Performance", category: "sponsor", target: 4, operator: ">=", unit: "/5.0", frequency: "Trimestral" },
-  { id: "SC-032", key: "cra_response_48h", label: "% Consultas CRA/Sponsor ≤48h", category: "sponsor", target: 90, operator: ">=", unit: "%", frequency: "Semanal" },
-  { id: "SC-033", key: "sponsor_nps", label: "NPS de Sponsors", category: "sponsor", target: 8, operator: ">=", unit: "/10", frequency: "Trimestral" },
+  // ⭐ SATISFACCIÓN SPONSORS (2 KPIs: #26-27)
+  { id: "SC-26", key: "cra_response_48h", label: "% Consultas CRA/Sponsor Respondidas ≤48h", category: "sponsor", target: 95, operator: ">=", unit: "%", frequency: "Semanal" },
+  { id: "SC-27", key: "sponsor_performance_score", label: "Score Evaluación Performance Sponsor", category: "sponsor", target: 4.0, operator: ">=", unit: "/5", frequency: "Trimestral" },
 
-  // GESTIÓN DE EQUIPO (6 KPIs)
-  { id: "SC-034", key: "annual_turnover", label: "Turnover Anual Equipo", category: "team", target: 18, operator: "<=", unit: "%", frequency: "Anual" },
-  { id: "SC-035", key: "satisfactory_performance_pct", label: "% Equipo Evaluación Satisfactoria", category: "team", target: 80, operator: ">=", unit: "%", frequency: "Semestral" },
-  { id: "SC-036", key: "gcp_current_pct", label: "% Equipo GCP Vigente", category: "team", target: 100, operator: "=", unit: "%", frequency: "Mensual" },
-  { id: "SC-037", key: "span_of_control", label: "Span of Control", category: "team", target: 8, operator: "<=", unit: "reportes", frequency: "Mensual" },
-  { id: "SC-038", key: "training_completion_pct", label: "Training Completado vs Plan", category: "team", target: 90, operator: ">=", unit: "%", frequency: "Mensual" },
-  { id: "SC-039", key: "workload_score", label: "Workload Score Equipo", category: "team", target: "2.5-3.5", operator: "range", unit: "score", frequency: "Semanal" },
-
-  // EFICIENCIA OPERATIVA (4 KPIs)
-  { id: "SC-040", key: "studies_per_coordinator", label: "Estudios Activos por Coordinador", category: "efficiency", target: "3-5", operator: "range", unit: "qty", frequency: "Mensual" },
-  { id: "SC-041", key: "patients_per_coordinator", label: "Pacientes Activos por Coordinador", category: "efficiency", target: "15-25", operator: "range", unit: "qty", frequency: "Semanal" },
-  { id: "SC-042", key: "contingency_resolution_hours", label: "Tiempo Resolución Contingencias", category: "efficiency", target: 4, operator: "<=", unit: "horas", frequency: "Por evento" },
-  { id: "SC-043", key: "mv_siv_participation", label: "% Participación en MV/SIV", category: "efficiency", target: 100, operator: "=", unit: "%", frequency: "Por visita" },
+  // 👥 GESTIÓN DE EQUIPO (2 KPIs: #28-29)
+  { id: "SC-28", key: "gcp_current_pct", label: "% Equipo GCP Vigente", category: "team", target: 100, operator: "=", unit: "%", frequency: "Mensual" },
+  { id: "SC-29", key: "training_vs_plan", label: "Training Completado vs Plan", category: "team", target: 95, operator: ">=", unit: "%", frequency: "Mensual" },
 ]
 
-// Categorías
+// Categorías (7 del KPIs.md)
 const CATEGORIES = [
-  { key: "recruitment", label: "Reclutamiento", icon: Target, color: "text-indigo-600", bgColor: "bg-indigo-50", count: 5 },
-  { key: "execution", label: "Ejecución de Visitas", icon: Calendar, color: "text-blue-600", bgColor: "bg-blue-50", count: 4 },
-  { key: "safety", label: "Seguridad y Compliance", icon: AlertTriangle, color: "text-amber-600", bgColor: "bg-amber-50", count: 5 },
-  { key: "monitoring", label: "Monitoring Action Items", icon: ClipboardCheck, color: "text-purple-600", bgColor: "bg-purple-50", count: 6 },
-  { key: "startup", label: "Start-up y Regulatorio", icon: Rocket, color: "text-cyan-600", bgColor: "bg-cyan-50", count: 6 },
-  { key: "sponsor", label: "Satisfacción Patrocinadores", icon: Star, color: "text-yellow-600", bgColor: "bg-yellow-50", count: 3 },
-  { key: "team", label: "Gestión de Equipo", icon: Users, color: "text-emerald-600", bgColor: "bg-emerald-50", count: 6 },
-  { key: "efficiency", label: "Eficiencia Operativa", icon: Settings, color: "text-slate-600", bgColor: "bg-slate-50", count: 4 },
+  { key: "startup", label: "Start-up", icon: Rocket, color: "text-cyan-600", bgColor: "bg-cyan-50", count: 6 },
+  { key: "recruitment", label: "Reclutamiento y Retención", icon: Target, color: "text-indigo-600", bgColor: "bg-indigo-50", count: 6 },
+  { key: "quality", label: "Calidad de Datos", icon: ClipboardCheck, color: "text-amber-600", bgColor: "bg-amber-50", count: 6 },
+  { key: "digital", label: "Transformación Digital", icon: Settings, color: "text-blue-600", bgColor: "bg-blue-50", count: 2 },
+  { key: "monitoring", label: "Monitoreo y Action Items", icon: AlertTriangle, color: "text-purple-600", bgColor: "bg-purple-50", count: 4 },
+  { key: "sponsor", label: "Satisfacción Sponsors", icon: Star, color: "text-yellow-600", bgColor: "bg-yellow-50", count: 2 },
+  { key: "team", label: "Gestión de Equipo", icon: Users, color: "text-emerald-600", bgColor: "bg-emerald-50", count: 2 },
 ]
+
+// Tipos para datos adicionales de KPIs
+interface PatientContact {
+  id: string
+  site_id: string
+  referral_date: string
+  contact_date: string | null
+  hours_to_contact: number | null
+}
+
+interface SponsorQuery {
+  id: string
+  site_id: string
+  received_at: string
+  responded_at: string | null
+  hours_to_response: number | null
+}
+
+interface SponsorEvaluation {
+  id: string
+  site_id: string
+  evaluation_date: string
+  score: number
+  quarter: string
+}
 
 interface SCLeadDashboardProps {
   weeklyReports: SCLeadWeeklyReport[]
@@ -111,6 +123,9 @@ interface SCLeadDashboardProps {
   auditReadiness: SCLeadAuditReadiness[]
   sites: Site[]
   userSiteId: string | null
+  patientContacts?: PatientContact[]
+  sponsorQueries?: SponsorQuery[]
+  sponsorEvaluations?: SponsorEvaluation[]
 }
 
 // Calcular estado del KPI
@@ -173,6 +188,9 @@ export function SCLeadDashboard({
   auditReadiness,
   sites,
   userSiteId,
+  patientContacts = [],
+  sponsorQueries = [],
+  sponsorEvaluations = [],
 }: SCLeadDashboardProps) {
   const [selectedSite, setSelectedSite] = useState<string>(userSiteId || "all")
   const [activeCategory, setActiveCategory] = useState<string>("all")
@@ -183,154 +201,134 @@ export function SCLeadDashboard({
     return weeklyReports.find((r) => r.site_id === selectedSite) || null
   }, [weeklyReports, selectedSite])
 
-  // Calcular valor de cada KPI
+  // Calcular valor de cada KPI (28 KPIs del KPIs.md)
   const calculateKPIValue = (key: string): number | null => {
     const r = latestReport
 
     switch (key) {
-      // Reclutamiento
-      case "screen_failure_rate":
-        if (!r?.patients_screened) return null
-        return Math.round((r.screen_failures / r.patients_screened) * 100)
-      case "conversion_screening_randomized":
-        if (!r?.patients_screened) return null
-        return Math.round((r.patients_randomized / r.patients_screened) * 100)
-      case "days_referral_to_contact":
-        return null // Calculado por paciente individual
-      case "recruitment_target_compliance":
+      // 🚀 START-UP
+      case "feasibility_response":
+        return null // Calculado por estudio (días desde recepción hasta respuesta)
+      case "team_assignment_post_selection":
+        return null // Calculado por estudio
+      case "training_completed_pre_siv":
+        return null // Calculado por estudio
+      case "checklist_pre_siv":
+        return null // Calculado por estudio
+      case "siv_to_fpi":
+        const withFPFV = startupTrackers.filter(s => s.fpfv_date && s.ec_approval_date)
+        if (withFPFV.length === 0) return null
+        const avgDays = withFPFV.reduce((sum, s) => {
+          const approval = new Date(s.ec_approval_date!)
+          const fpfv = new Date(s.fpfv_date!)
+          return sum + (fpfv.getTime() - approval.getTime()) / (1000 * 60 * 60 * 24)
+        }, 0) / withFPFV.length
+        return Math.round(avgDays)
+      case "siv_mv_participation":
+        if (!r?.mv_siv_planned) return null
+        return Math.round((r.mv_siv_participated / r.mv_siv_planned) * 100)
+
+      // 🎯 RECLUTAMIENTO Y RETENCIÓN
+      case "enrollment_vs_plan":
         if (!r?.monthly_target) return null
         return Math.round((r.monthly_accumulated / r.monthly_target) * 100)
-      case "randomized_vs_projection":
-        if (!r?.weekly_projection) return null
-        return Math.round((r.weekly_actual / r.weekly_projection) * 100)
-
-      // Ejecución
-      case "visits_completed_pct":
+      case "screen_fail_rate":
+        if (!r?.patients_screened) return null
+        return Math.round((r.screen_failures / r.patients_screened) * 100)
+      case "patient_retention":
+        if (!r?.patients_ongoing_start) return null
+        return Math.round(((r.patients_ongoing_start - r.patients_lost) / r.patients_ongoing_start) * 100)
+      case "referral_to_contact":
+        // SC-10: Tiempo promedio derivación → contacto (en horas)
+        const contactsWithTime = patientContacts.filter(c => c.hours_to_contact !== null)
+        if (contactsWithTime.length === 0) return null
+        const avgHours = contactsWithTime.reduce((sum, c) => sum + (c.hours_to_contact || 0), 0) / contactsWithTime.length
+        return Math.round(avgHours)
+      case "visits_completed_vs_planned":
         if (!r?.visits_planned) return null
         return Math.round((r.visits_completed / r.visits_planned) * 100)
       case "visit_window_adherence":
         if (!r?.visits_completed) return null
         return Math.round((r.visits_in_window / r.visits_completed) * 100)
-      case "procedures_complete_pct":
-        if (!r?.visits_completed) return null
-        return Math.round((r.visits_procedures_complete / r.visits_completed) * 100)
-      case "patient_retention_monthly":
-        if (!r?.patients_ongoing_start) return null
-        return Math.round(((r.patients_ongoing_start - r.patients_lost) / r.patients_ongoing_start) * 100)
 
-      // Seguridad
-      case "sae_reported_on_time":
-        if (!r?.saes_identified) return r ? 100 : null
-        return Math.round((r.saes_reported_24h / r.saes_identified) * 100)
-      case "major_deviations_weekly":
-        return r?.major_deviations ?? null
+      // 📊 CALIDAD DE DATOS
+      case "query_resolution":
+        return null // Calculado desde queries (horas promedio)
+      case "etmf_completeness":
+        return null // Calculado desde documentos eTMF
+      case "critical_deviations_per_100":
+        if (!r?.visits_completed) return null
+        return Math.round((r.major_deviations / r.visits_completed) * 100)
       case "protocol_deviation_rate":
         if (!r?.total_procedures_month) return null
         return Math.round((r.total_deviations_month / r.total_procedures_month) * 100 * 10) / 10
-      case "major_deviation_rate":
-        if (!r?.total_procedures_month) return null
-        return Math.round((r.major_deviations_month / r.total_procedures_month) * 100 * 10) / 10
-      case "open_capas":
-        return r?.open_capas ?? null
+      case "sae_reported_24h":
+        if (!r?.saes_identified) return r ? 100 : null
+        return Math.round((r.saes_reported_24h / r.saes_identified) * 100)
+      case "capa_closed_on_time":
+        return null // Calculado desde CAPAs cerradas
 
-      // Monitoring
-      case "open_action_items":
-        return actionItems.filter(ai => ai.status === "Abierto").length
-      case "ai_closed_on_time":
+      // 💻 TRANSFORMACIÓN DIGITAL
+      case "data_entry_post_visit":
+        return null // Calculado desde tiempos de data entry
+      case "etmf_docs_on_time":
+        return null // Calculado desde documentos eTMF
+
+      // 📝 MONITOREO Y ACTION ITEMS
+      case "ai_closed_14days":
         const closed = actionItems.filter(ai => ai.status === "Cerrado")
         if (closed.length === 0) return null
         const onTime = closed.filter(ai => {
           const created = new Date(ai.created_at)
           const closedDate = ai.closed_date ? new Date(ai.closed_date) : new Date()
           const days = Math.floor((closedDate.getTime() - created.getTime()) / (1000 * 60 * 60 * 24))
-          return days <= 15
+          return days <= 14
         })
         return Math.round((onTime.length / closed.length) * 100)
-      case "ai_overdue":
+      case "ai_aging_30days":
         return actionItems.filter(ai => {
           if (ai.status === "Cerrado") return false
           const dueDate = new Date(ai.due_date)
           const today = new Date()
-          return (today.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24) > 15
+          return (today.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24) > 30
         }).length
       case "avg_days_ai_closure":
         const closedItems = actionItems.filter(ai => ai.status === "Cerrado" && ai.closed_date)
         if (closedItems.length === 0) return null
         const totalDays = closedItems.reduce((sum, ai) => {
           const created = new Date(ai.created_at)
-          const closed = new Date(ai.closed_date!)
-          return sum + Math.floor((closed.getTime() - created.getTime()) / (1000 * 60 * 60 * 24))
+          const closedDate = new Date(ai.closed_date!)
+          return sum + Math.floor((closedDate.getTime() - created.getTime()) / (1000 * 60 * 60 * 24))
         }, 0)
         return Math.round(totalDays / closedItems.length)
-      case "major_findings_mv_pct":
-        return null // Calculado por MV
-      case "audit_readiness_score":
-        const latestAudit = auditReadiness[0]
-        return latestAudit?.score ?? null
+      case "major_findings_mv":
+        const majorFindings = actionItems.filter(ai => ai.severity === "Major")
+        const totalFindings = actionItems.length
+        if (totalFindings === 0) return null
+        return Math.round((majorFindings.length / totalFindings) * 100)
 
-      // Startup
-      case "days_to_fpfv":
-        return null // Calculado por estudio
-      case "fpfv_within_30days_pct":
-        const withFPFV = startupTrackers.filter(s => s.fpfv_date && s.ec_approval_date)
-        if (withFPFV.length === 0) return null
-        const within30 = withFPFV.filter(s => {
-          const approval = new Date(s.ec_approval_date!)
-          const fpfv = new Date(s.fpfv_date!)
-          return (fpfv.getTime() - approval.getTime()) / (1000 * 60 * 60 * 24) <= 30
-        })
-        return Math.round((within30.length / withFPFV.length) * 100)
-      case "submissions_no_resubmit":
-        if (startupTrackers.length === 0) return null
-        const noResubmit = startupTrackers.filter(s => !s.required_resubmission)
-        return Math.round((noResubmit.length / startupTrackers.length) * 100)
-      case "ec_approval_cycle_days":
-        return null // Calculado por estudio
-      case "studies_in_startup":
-        return startupTrackers.filter(s => s.status !== "FPFV Logrado" && s.status !== "Suspendido").length
-      case "pending_amendments":
-        return startupTrackers.filter(s => s.status === "Aprobacion Pendiente").length
-
-      // Sponsor
-      case "sponsor_performance_score":
-        return null // De evaluaciones trimestrales
+      // ⭐ SATISFACCIÓN SPONSORS
       case "cra_response_48h":
-        return null // De queries tracker
-      case "sponsor_nps":
-        return null // De evaluaciones
+        // SC-26: % consultas respondidas en ≤48h
+        const queriesWithResponse = sponsorQueries.filter(q => q.responded_at !== null)
+        if (queriesWithResponse.length === 0) return sponsorQueries.length > 0 ? 0 : null
+        const respondedIn48h = queriesWithResponse.filter(q => (q.hours_to_response || 0) <= 48)
+        return Math.round((respondedIn48h.length / queriesWithResponse.length) * 100)
+      case "sponsor_performance_score":
+        // SC-27: Score promedio de evaluaciones (sobre 5)
+        if (sponsorEvaluations.length === 0) return null
+        const avgScore = sponsorEvaluations.reduce((sum, e) => sum + e.score, 0) / sponsorEvaluations.length
+        return Math.round(avgScore * 10) / 10
 
-      // Team
-      case "annual_turnover":
-        return null // Cálculo anual
-      case "satisfactory_performance_pct":
-        if (teamMembers.length === 0) return null
-        const satisfactory = teamMembers.filter(m => m.performance_rating === "Satisfactorio" || m.performance_rating === "Excepcional")
-        return Math.round((satisfactory.length / teamMembers.length) * 100)
+      // 👥 GESTIÓN DE EQUIPO
       case "gcp_current_pct":
         if (teamMembers.length === 0) return null
-        const gcpCurrent = teamMembers.filter(m => m.gcp_current)
-        return Math.round((gcpCurrent.length / teamMembers.length) * 100)
-      case "span_of_control":
-        return teamMembers.filter(m => m.is_active).length
-      case "training_completion_pct":
-        return null // De training tracker
-      case "workload_score":
-        const activeMembers = teamMembers.filter(m => m.is_active && m.workload_score)
+        const gcpCurrent = teamMembers.filter(m => m.gcp_current && m.is_active)
+        const activeMembers = teamMembers.filter(m => m.is_active)
         if (activeMembers.length === 0) return null
-        return Math.round(activeMembers.reduce((sum, m) => sum + (m.workload_score || 0), 0) / activeMembers.length * 10) / 10
-
-      // Efficiency
-      case "studies_per_coordinator":
-        if (!r?.total_coordinators) return null
-        return Math.round((r.total_studies / r.total_coordinators) * 10) / 10
-      case "patients_per_coordinator":
-        if (!r?.total_coordinators) return null
-        return Math.round((r.total_patients_ongoing / r.total_coordinators) * 10) / 10
-      case "contingency_resolution_hours":
-        return null // De contingencias
-      case "mv_siv_participation":
-        if (!r?.mv_siv_planned) return null
-        return Math.round((r.mv_siv_participated / r.mv_siv_planned) * 100)
+        return Math.round((gcpCurrent.length / activeMembers.length) * 100)
+      case "training_vs_plan":
+        return null // Calculado desde training tracker
 
       default:
         return null
@@ -351,8 +349,8 @@ export function SCLeadDashboard({
       else noData++
     })
 
-    return { onTarget, warning, critical, noData, total: 39 }
-  }, [latestReport, actionItems, startupTrackers, teamMembers, auditReadiness])
+    return { onTarget, warning, critical, noData, total: 28 }
+  }, [latestReport, actionItems, startupTrackers, teamMembers, auditReadiness, patientContacts, sponsorQueries, sponsorEvaluations])
 
   // Filtrar KPIs por categoría
   const filteredKPIs = activeCategory === "all"
@@ -365,7 +363,7 @@ export function SCLeadDashboard({
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-2xl font-bold">Scorecard SC Lead</h1>
-          <p className="text-muted-foreground">39 KPIs en 8 categorías</p>
+          <p className="text-muted-foreground">28 KPIs en 7 categorías</p>
         </div>
         <Select value={selectedSite} onValueChange={setSelectedSite}>
           <SelectTrigger className="w-[200px]">
@@ -461,7 +459,7 @@ export function SCLeadDashboard({
       <Tabs value={activeCategory} onValueChange={setActiveCategory}>
         <TabsList className="flex flex-wrap h-auto gap-1 bg-transparent">
           <TabsTrigger value="all" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-            Todos (39)
+            Todos (28)
           </TabsTrigger>
           {CATEGORIES.map((cat) => {
             const Icon = cat.icon

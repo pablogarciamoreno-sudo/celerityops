@@ -32,11 +32,11 @@ export default async function ActionItemsPage() {
     .eq("is_active", true)
     .order("name")
 
-  // Fetch studies
+  // Fetch studies (active or enrolling)
   const { data: studies } = await supabase
     .from("studies")
     .select("id, protocol_number, name")
-    .eq("is_active", true)
+    .in("status", ["active", "enrolling"])
     .order("protocol_number")
 
   return (

@@ -2,13 +2,14 @@ export type Role = {
   id: string
   name: "COO" | "Site Lead" | "SC Lead" | "Study Coordinator" | "Regulatory Specialist" | "Data Entry Specialist" | "QA Manager"
   description: string
-  permissions_json: Record<string, boolean>
+  permissions: Record<string, boolean>  // Corregido: era permissions_json
   created_at: string
 }
 
 export type Site = {
   id: string
   name: string
+  code: string  // Agregado: código del sitio (MX-001, CL-001, etc.)
   country: string
   city: string
   address: string | null
@@ -33,18 +34,16 @@ export type User = {
 export type Study = {
   id: string
   protocol_number: string
+  name: string  // Corregido: era title
   sponsor: string
   therapeutic_area: string
   phase: "Phase I" | "Phase II" | "Phase III" | "Phase IV"
   status: "active" | "enrolling" | "closed" | "suspended" | "completed"
-  title: string | null
   target_enrollment: number
   start_date: string | null
   end_date: string | null
-  site_id: string | null
   created_at: string
-  updated_at: string
-  site?: Site
+  // Nota: site_id y updated_at no existen en Supabase
 }
 
 export type Screening = {
@@ -209,6 +208,7 @@ export type KPITarget = {
   threshold_critical: number | null
   site_id: string | null
   study_id: string | null
+  period: string | null  // Agregado: período del KPI
   created_at: string
 }
 
@@ -373,4 +373,114 @@ export type SCLeadKPIValue = {
   operator: KPIOperator
   unit: string
   status: KPIStatus
+}
+
+// =============================================
+// TABLAS ADICIONALES SC LEAD
+// =============================================
+
+export type SCLeadKPIDefinition = {
+  id: string
+  kpi_key: string
+  label: string
+  category: KPICategory
+  data_type: 'percentage' | 'count' | 'number' | 'decimal'
+  target_value: number | null
+  target_operator: KPIOperator
+  unit: string
+  input_frequency: string
+  sort_order: number
+  is_active: boolean
+  created_at: string
+}
+
+export type SCLeadKPIValueRecord = {
+  id: string
+  kpi_id: string
+  site_id: string
+  period_start: string
+  period_end: string
+  value: number | null
+  status: KPIStatus
+  notes: string | null
+  reported_by: string | null
+  created_at: string
+  updated_at: string
+  kpi?: SCLeadKPIDefinition
+  site?: Site
+}
+
+export type SCLeadPatientContact = {
+  id: string
+  site_id: string
+  study_id: string
+  referral_date: string
+  contact_date: string | null
+  referral_source: 'Derivación médica' | 'Base de datos' | 'Publicidad' | 'Referido' | 'Otro'
+  notes: string | null
+  created_at: string
+  site?: Site
+  study?: Study
+  days_to_contact?: number  // Calculado
+}
+
+export type SCLeadSponsorQuery = {
+  id: string
+  site_id: string
+  study_id: string
+  received_date: string
+  response_date: string | null
+  origin: 'CRA' | 'Sponsor' | 'CRO' | 'Comité Ética' | 'Autoridad Regulatoria'
+  description: string | null
+  notes: string | null
+  created_at: string
+  site?: Site
+  study?: Study
+  response_hours?: number  // Calculado
+}
+
+export type SCLeadTeamMovement = {
+  id: string
+  site_id: string
+  year: number
+  headcount_start: number
+  hires: number
+  departures: number
+  headcount_current: number
+  trainings_planned: number
+  trainings_completed: number
+  created_at: string
+  updated_at: string
+  site?: Site
+  turnover_rate?: number  // Calculado
+  training_completion?: number  // Calculado
+}
+
+export type SCLeadSponsorEvaluation = {
+  id: string
+  site_id: string
+  quarter: string
+  sponsor: string
+  study_name: string
+  performance_score: number  // 1.0 a 5.0
+  nps_score: number  // 0 a 10
+  comments: string | null
+  evaluation_date: string | null
+  created_at: string
+  site?: Site
+}
+
+export type SCLeadContingency = {
+  id: string
+  site_id: string
+  study_id: string | null
+  report_date: string
+  description: string
+  priority: 'Crítica' | 'Alta' | 'Media' | 'Baja'
+  resolution_date: string | null
+  notes: string | null
+  created_at: string
+  site?: Site
+  study?: Study
+  resolution_hours?: number  // Calculado
 }

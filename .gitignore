@@ -43,3 +43,6 @@ coverage
 
 # Misc
 *.log
+
+# Testing folder (local only)
+.testing/

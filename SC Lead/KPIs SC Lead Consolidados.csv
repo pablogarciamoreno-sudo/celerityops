@@ -1,0 +1,56 @@
+﻿📊 KPIs SC LEAD 2026 - CONSOLIDADO FINAL,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7
+Alineados con KPIs del COO 2026 (Plan CEO + Propuestas Pablo),,,,,,,
+Leyenda:,🟢 Alimenta KPI del COO,,🔵 Operativo SC Lead,,,,
+,,,,,,,
+#,KPI SC LEAD,Q1,Q2,Q3,Q4,TIPO,KPI COO QUE ALIMENTA
+🚀 1. START-UP,,,,,,,
+1,Respuesta a Factibilidad (site),≤3 días,≤2 días,≤2 días,≤2 días,DIRECTO,COO-01: Respuesta a Factibilidad
+2,Asignación de Equipo Post-Selección,≤5 días,≤4 días,≤3 días,≤3 días,DIRECTO,COO-02: Asignación Equipo
+3,Entrenamientos Sistemas Completados Pre-SIV,100%,100%,100%,100%,DIRECTO,COO-03: Entrenamientos Pre-SIV
+4,Checklist Pre-SIV Completado (1 sem antes),100%,100%,100%,100%,DIRECTO,COO-04: Checklist Pre-SIV
+5,SIV → FPI,≤21 días,≤21 días,≤21 días,≤21 días,DIRECTO,COO-05: SIV→FPI
+6,Participación en SIV/MV,100%,100%,100%,100%,OPERATIVO,Asegura calidad de visitas de monitoreo
+🎯 2. RECLUTAMIENTO Y RETENCIÓN,,,,,,,
+7,Enrollment vs Plan (site),≥75%,≥80%,≥85%,≥85%,DIRECTO,COO-06: Enrollment vs Plan (compartido)
+8,Screen-Fail Rate,≤40%,≤35%,≤30%,≤28%,DIRECTO,COO-07: Screen-Fail Rate
+9,Retención de Pacientes,Baseline,≥80%,≥85%,≥85%,DIRECTO,COO-08: Retención de Pacientes
+10,Tiempo Derivación → Contacto Paciente,≤48h,≤48h,≤24h,≤24h,OPERATIVO,Optimiza funnel de reclutamiento
+11,% Visitas Completadas vs Planificadas,≥90%,≥92%,≥95%,≥95%,OPERATIVO,Asegura ejecución de protocolo
+12,% Adherencia a Ventana de Visita,≥85%,≥88%,≥90%,≥90%,OPERATIVO,Minimiza desviaciones por timing
+📊 3. CALIDAD DE DATOS,,,,,,,
+13,Resolución de Queries,≤96h,≤72h,≤48h,≤48h,DIRECTO,COO-10: Resolución de Queries
+14,eTMF Completeness,≥80%,≥85%,≥90%,≥95%,DIRECTO,COO-11: eTMF Completeness
+15,Desviaciones Críticas / 100 Visitas,≤4,≤3,≤2,≤2,DIRECTO,COO-12: Desviaciones Críticas
+16,Tasa Desviaciones Protocolo (todas),≤6%,≤5%,≤4%,≤3%,OPERATIVO,Indicador de calidad operativa global
+17,% SAEs Reportados <24h,100%,100%,100%,100%,OPERATIVO,Compliance ICH-GCP E6(R2) - crítico
+18,CAPA Cerradas On-Time,≥85%,≥90%,≥95%,≥95%,DIRECTO,COO-13: CAPA Cerradas On-Time
+💻 4. TRANSFORMACIÓN DIGITAL,,,,,,,
+20,Data Entry Post-Visita,≤72h,≤48h,≤24h,≤24h,DIRECTO,COO-15: Data Entry Post-Visita
+21,% Documentos Subidos eTMF en Plazo,≥80%,≥85%,≥90%,≥95%,OPERATIVO,Soporta eTMF Completeness
+📝 5. MONITOREO Y ACTION ITEMS,,,,,,,
+22,Action Items Cerrados ≤14 días,≥85%,≥90%,≥95%,≥95%,DIRECTO,COO-17: Action Items Cerrados ≤14d
+23,Action Items Aging >30 días,≤5,≤2,≤1,≤1,DIRECTO,COO-18: Action Items Aging >30d
+24,Promedio Días Cierre Action Items,≤12,≤10,≤8,≤7,OPERATIVO,Detalle operativo de gestión de AIs
+25,% Major Findings en MV,≤8%,≤6%,≤5%,≤5%,OPERATIVO,Indicador de calidad de ejecución
+⭐ 6. SATISFACCIÓN SPONSORS,,,,,,,
+26,% Consultas CRA/Sponsor Respondidas ≤48h,≥85%,≥90%,≥90%,≥95%,OPERATIVO,Relación con CRAs y sponsors
+27,Score Evaluación Performance Sponsor,≥3.5/5,≥3.8/5,≥4.0/5,≥4.0/5,OPERATIVO,Evaluación trimestral de sponsors
+👥 7. GESTIÓN DE EQUIPO,,,,,,,
+28,% Equipo GCP Vigente,100%,100%,100%,100%,OPERATIVO,Compliance - requisito base
+29,Training Completado vs Plan,≥85%,≥90%,≥90%,≥95%,OPERATIVO,Desarrollo del equipo
+,,,,,,,
+,,,,,,,
+📈 RESUMEN,,,,,,,
+Total KPIs SC Lead:,31,,,,,,
+,,,,,,,
+🟢 KPIs que alimentan al COO (DIRECTOS):,15 (48%),,,,,,
+🔵 KPIs operativos SC Lead:,16 (52%),,,,,,
+,,,,,,,
+Por Categoría:,,,,,,,
+  1. Start-up:,6 KPIs (5 directos),,,,,,
+  2. Reclutamiento y Retención:,6 KPIs (3 directos),,,,,,
+  3. Calidad de Datos:,7 KPIs (4 directos),,,,,,
+  4. Transformación Digital:,2 KPIs (1 directo),,,,,,
+  5. Monitoreo y Action Items:,4 KPIs (2 directos),,,,,,
+  6. Satisfacción Sponsors:,2 KPIs (0 directos),,,,,,
+  7. Gestión de Equipo:,4 KPIs (0 directos),,,,,,
